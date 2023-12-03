@@ -1,0 +1,72 @@
+#file: noinspection undefined
+server:
+  port: 8080
+spring:
+  shardingsphere:
+    datasource:
+      names:
+        master,slave
+      # 主数据源
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/reggie?characterEncoding=utf-8
+        username: root
+        password: 123456
+      # 从数据源
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3307/reggie?characterEncoding=utf-8
+        username: root
+        password: 123456
+    masterslave:
+      # 读写分离配置
+      load-balance-algorithm-type: round_robin #轮询
+      # 最终的数据源名称
+      name: dataSource
+      # 主库数据源名称
+      master-data-source-name: master
+      # 从库数据源名称列表，多个逗号分隔
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true #开启SQL显示，默认false
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0 #操作0号数据库
+    jedis:
+      pool:
+        #Redis连接池配置
+        max-active: 8
+        max-wait: 1ms
+        max-idle: 4
+        min-idle: 0
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 3458298931@qq.com
+    password: vwhkafowajuschag
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+    from: 3458298931@qq.com
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign_id
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+reggie:
+  path: D:\resource\
